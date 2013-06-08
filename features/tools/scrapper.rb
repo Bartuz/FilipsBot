@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'open-uri'
-class Scrapper
+require 'singleton'
+class Weather_Scrapper
 	include Singleton
 	attr_accessor :city, :page, :url
 

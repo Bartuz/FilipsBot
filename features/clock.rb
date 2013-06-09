@@ -20,7 +20,7 @@ class Clock
 		runtime_in_hours=(difference.in_hours%60).to_i
 		runtime_in_days=(difference.in_days%24).to_i
 		runtime_in_weeks=(difference.in_weeks%7).to_i
-		puts "Runs for #{runtime_in_weeks} weeks, #{runtime_in_days} days, #{runtime_in_hours} hours, #{runtime_in_minutes} minutes and #{runtime_in_secs} seconds"
+		"Runs for #{runtime_in_weeks} weeks, #{runtime_in_days} days, #{runtime_in_hours} hours, #{runtime_in_minutes} minutes and #{runtime_in_secs} seconds"
 	end
 
 	def display_time_now

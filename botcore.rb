@@ -1,36 +1,42 @@
 require "socket"
 class Bot_core
-
-	attr_reader :server_adress, :port, :nick ,:channel
+	attr_reader :server_adress, :port, :nick ,:channel, :server
 
   def initialize(params = {
   		:server_adress => "chat.freenode.net",
-  		:port => 667,
   		:channel => "#bitmaker",
+  		:port => 6667,
   		:nick => "Filip"
   	})
 	  @server_adress = params[:server_adress]
-	  @port = params[:port]
-    @channel = params[:channel]
-    @nick = params[:nick]
+	  @port =  params[:port]
+      @channel = params[:channel]
+      @nick = params[:nick]
+      @server = TCPSocket.open(server_adress,port)
   end
 
   def connect
-    server.puts "USER filipsbot 0 * FilipsBot"
-    server.puts "NICK #{nick}}"
-    server.puts "JOIN #{channel}"
-    send_message("Filips Bot just logged in!")
+    @server.puts "USER filipsbot 0 * FilipsBot"
+    @server.puts "NICK #{nick}"
+    @server.puts "JOIN #{channel}"
+    send_message("Filips-Bot just logged in!")
+  end
+
+  def message
+      @server.gets
+  end
+
+  def server_msg?
+      temp_message = message
+      temp_message.include? "PRIVMSG #{channel} :"
   end
 
   def send_message(msg) 
-    server.puts "PRIVMSG #{@channel} :#{msg}"
+    @server.puts "PRIVMSG #{@channel} :#{msg}"
   end
 
   private
 
-  def server
-    TCPSocket.open(server_adress,port)
-  end
 
 end
 

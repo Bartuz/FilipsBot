@@ -1,17 +1,18 @@
 require "socket"
 class Bot_core
 
-	attr_reader :server, :port, :nick ,:channel
+	attr_reader :server_adress, :port, :nick ,:channel
 
   def initialize(params = {
-  		:server => "chat.freenode.net"
-  		:port => 667
-  		:channel => "#bitmaker"
+  		:server_adress => "chat.freenode.net",
+  		:port => 667,
+  		:channel => "#bitmaker",
   		:nick => "Filip"
   	})
-	   @server = params[:server]
-	   @port = params[:port]
-  	   @channel = params[:channel]
+	  @server_adress = params[:server_adress]
+	  @port = params[:port]
+    @channel = params[:channel]
+    @nick = params[:nick]
   end
 
   def connect
@@ -28,7 +29,7 @@ class Bot_core
   private
 
   def server
-    TCPSocket.open(server,port)
+    TCPSocket.open(server_adress,port)
   end
 
 end

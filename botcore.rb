@@ -1,5 +1,5 @@
 require "socket"
-class bot_core
+class Bot_core
 
 	attr_reader :server, :port, :nick ,:channel
 

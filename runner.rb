@@ -1,7 +1,6 @@
 require 'singleton'
 require_relative 'botcore'
-require_relative 'features/weather'
-require_relative 'features/clock'
+require_relative 'features'
 class Runner
 
 	include Singleton
@@ -37,6 +36,9 @@ class Runner
  			@core = Bot_core.new
  			puts "Coudn't understand you\nInitialized with default parameters"
  		end
+ 			puts "Loading features!"
+ 			@features = Features.instance
+ 			puts "Features Loaded!"
  			puts "Connecting..."
  			@core.connect
  		end
@@ -53,8 +55,9 @@ class Runner
  				@core.send_message("nothing heppened")
  			end	
  		#end
- 	end
- 	end
+ 		end
+ 		counter+=1
+ 		end
  	end
 
  	private

@@ -5,6 +5,7 @@ class Weather
 
 	def initialize(name_of_city = "Torotno")
 		@data = Weather_Scrapper.new(name_of_city)
+		puts "Weather: Loaded!"
 	end
 
 	def display_today

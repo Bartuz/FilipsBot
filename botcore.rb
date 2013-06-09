@@ -26,9 +26,8 @@ class Bot_core
       @server.gets
   end
 
-  def server_msg?
-      temp_message = message
-      temp_message.include? "PRIVMSG #{channel} :"
+  def server_msg?(checking_msg)
+      checking_msg.include? "PRIVMSG #{channel} :"
   end
 
   def send_message(msg) 

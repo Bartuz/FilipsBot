@@ -38,28 +38,30 @@ class Runner
  		end
  			puts "Loading features!"
  			@features = Features.instance
- 			puts "Features Loaded!"
  			puts "Connecting..."
  			@core.connect
  		end
 
  	def run
+ 		puts "Connected to channel!"
  		counter = 0
- 		until @core.eof? do
- 		msg=core.message
- 		if channel_msg?
+ 		loop do
+ 			msg=core.message
+ 			counter+=1
+ 			next if msg.class==NilClass || !channel_msg?(msg)
+ 			puts "Entered loop"
  			if msg.include? "!weather"
  				city = msg.split("\"")[1]
- 				msg_send(weather.reload(city))
- 				msg_send(weather.display_today)
+ 				weather.reload(city)
+ 				msg_send(weather.display_today) if msg.include? "today"
+ 				weather.display_future.each { |day| msg_send(day) } if msg.include? ("next") ||  msg.include?("future")
  			else
  				@core.send_message("nothing heppened")
  			end	
- 		#end
- 		if counter%10==0
- 			msg_send(clock.runtime)
- 		end
- 		counter+=1
+ 			if counter%10==0
+ 				msg_send(clock.runtime)
+ 			end
+ 			
  		end
  	end
 
@@ -77,8 +79,8 @@ class Runner
  		features.clock
  	end
 
- 	def channel_msg?
- 		core.server_msg?
+ 	def channel_msg?(checking_msg)
+ 		core.server_msg?(checking_msg)
  	end
 
 end

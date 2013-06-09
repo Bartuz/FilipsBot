@@ -7,6 +7,7 @@ class Clock
 
 	def initialize
 		@start_time = Time.now
+		puts "Clock: Loaded!"
 	end
 
 	def display_start_time

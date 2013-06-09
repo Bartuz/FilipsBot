@@ -21,7 +21,7 @@ class Weather_Scrapper
 	end
 
 	def current_weather
-		"Temperature in #{city} is #{current_temp[0]} (that is #{current_temp[1]}).\nConditions are #{current_conditions}."
+		"Temperature in #{city} is #{current_temp[0]} (that is #{current_temp[1]}). Conditions are #{current_conditions}."
 	end
 
 	def future_days(scope)

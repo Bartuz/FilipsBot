@@ -5,7 +5,7 @@ class Runner
 
 	include Singleton
 
-	attr_accessor :core
+	attr_accessor :core, :features
 
 	TYPE_AREA = "\n" + "_"*20 + "\b"*20
 
@@ -49,18 +49,33 @@ class Runner
  		msg=core.message
  		if channel_msg?
  			if msg.include? "!weather"
- 				msg = msg.split("\"")[1]
- 				@core.send_message(msg)
+ 				city = msg.split("\"")[1]
+ 				msg_send(weather.reload(city))
+ 				msg_send(weather.display_today)
  			else
  				@core.send_message("nothing heppened")
  			end	
  		#end
+ 		if counter%10==0
+ 			msg_send(clock.runtime)
  		end
  		counter+=1
  		end
  	end
 
  	private
+
+ 	def msg_send(msg)
+ 		@core.send_message(msg)
+ 	end
+
+ 	def weather
+ 		features.weather
+ 	end
+
+ 	def clock
+ 		features.clock
+ 	end
 
  	def channel_msg?
  		core.server_msg?

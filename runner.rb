@@ -74,10 +74,25 @@ class Runner
 	 				msg_send("*Type '!weather \"CITY NAME\" today' to recive today weather")
 	 				msg_send("*Type '!weather \"CITY NAME\" future/next/days/tomorrow' to recive next days weather")
  				end
+ 			elsif msg.include?("!time")
+ 				if msg.include?("!time runtime")
+ 					msg_send(clock.runtime)
+ 				elsif msg.include?("!time start")
+ 					msg_send(clock.display_start_time)
+ 				elsif msg.include?("!time now")
+ 					msg_send(clock.display_time_now)
+ 				else
+ 					msg_send("*Type '!time runtime' to recive runtime of #{bot_name}")
+	 				msg_send("*Type '!time start' to recive date and time when #{bot_name} started working")
+	 				msg_send("*Type '!time now' to recive actual date and time")
+ 				end
+ 			elsif msg.include?("!help")
+ 				msg_send("*Type '!time' to learn more about !time commands")
+ 				msg_send("*Type '!weather' to learn more about !weather commands")
  			else
  				@core.send_message("Command list - type '!help'")
- 			end	
- 			if counter%11==0
+ 			end
+ 			if counter%20==0
  				msg_send("#{bot_name} " + clock.runtime)
  			end
  		end

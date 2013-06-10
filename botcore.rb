@@ -14,14 +14,14 @@ class Bot_core
     @channel = params[:channel]
     @nick = params[:nick]
     @server = TCPSocket.open(server_adress,port)
-    puts "Initialized bot to #{server_adress}:#{port} server."
+    puts "Established connection to #{server_adress}:#{port} server."
   end
 
   def connect
     @server.puts "USER filipsbot 0 * FilipsBot"
     @server.puts "NICK #{nick}"
     @server.puts "JOIN #{channel}"
-    send_message("Filips-Bot just logged in!")
+    send_message("Filips-Bot just logged in! Type !help to get more info!")
   end
 
   def message

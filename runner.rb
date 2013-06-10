@@ -17,7 +17,6 @@ class Runner
 		case answer
 		when 'd'
 			@core = Bot_core.new
-			puts "Initialized with default parameters"
 		when 'c'
 			form = Hash.new
 			print "Server adress: " + TYPE_AREA
@@ -31,12 +30,11 @@ class Runner
  			print "Nickname: " +TYPE_AREA
  			form[:nick] = gets.chomp
  			@core = Bot_core.new(form)
- 			puts "Initialized with custom parameters"
  		else 
+ 			puts "Coudn't understand you"
  			@core = Bot_core.new
- 			puts "Coudn't understand you\nInitialized with default parameters"
  		end
- 			puts "Loading features!"
+ 			puts "Loading features..."
  			@features = Features.instance
  			puts "Connecting..."
  			@core.connect
@@ -44,28 +42,52 @@ class Runner
 
  	def run
  		puts "Connected to channel!"
- 		counter = 0
- 		loop do
+ 		counter = 1
+ 		until @core.server.eof? do 
  			msg=core.message
- 			counter+=1
- 			next if msg.class==NilClass || !channel_msg?(msg)
- 			puts "Entered loop"
+ 			counter+=1 unless msg.start_with? ":#{bot_name}"
+ 			next if msg.class==NilClass || !msg.include?("#{core.channel} :!")
+ 			puts "\t#{bot_name}log: " + msg
+ 			msg.downcase!
  			if msg.include? "!weather"
- 				city = msg.split("\"")[1]
- 				weather.reload(city)
- 				msg_send(weather.display_today) if msg.include? "today"
- 				weather.display_future.each { |day| msg_send(day) } if msg.include? ("next") ||  msg.include?("future")
+ 				if /\"\w+\"/ =~ msg	
+	 				begin
+		 				city = msg.split("\"")[1]
+		 			raise "ANTY-BUG mode is activated! Wish you luck next time... :>" if city.length<2 || city==nil
+		 				city[0] = city[0].upcase
+		 				if weather.city_exist?(city)
+		 					weather.reload(city)
+		 					if msg.include?("future") || msg.include?("next") || msg.include?("tomorrow") || msg.include?("days")
+		 						scope = msg.include?("tomorrow") ? 1 : 3
+		 						weather.display_future(scope).each { |day| msg_send(day) }
+		 					else
+		 						msg_send(weather.display_today)
+		 					end
+		 				else
+		 					msg_send("Coudnt find weather for #{city}! I'm sorry. Try again!")
+		 				end
+		 			rescue Exception => e
+		 				msg_send(e.message)
+		 			end
+	 			else
+	 				msg_send("*Type '!weather \"CITY NAME\"' to recive todays weather")
+	 				msg_send("*Type '!weather \"CITY NAME\" today' to recive today weather")
+	 				msg_send("*Type '!weather \"CITY NAME\" future/next/days/tomorrow' to recive next days weather")
+ 				end
  			else
- 				@core.send_message("nothing heppened")
+ 				@core.send_message("Command list - type '!help'")
  			end	
- 			if counter%10==0
- 				msg_send(clock.runtime)
+ 			if counter%11==0
+ 				msg_send("#{bot_name} " + clock.runtime)
  			end
- 			
  		end
  	end
 
  	private
+
+ 	def bot_name
+ 		@core.nick
+ 	end
 
  	def msg_send(msg)
  		@core.send_message(msg)

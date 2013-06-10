@@ -11,6 +11,9 @@ class Weather_Scrapper
 		@page = Nokogiri::HTML(open(url)).at_css(".sa")
 	end
 
+	def exist?(city)
+		Nokogiri::HTML(open("http://www.ask.com/web?q=#{city}+weather&search=&qsrc=0&o=0&l=dir")).at_css(".sa_weather_temp") != nil
+	end
 
 	def update(new_city_name)
 		unless @city == new_city_name

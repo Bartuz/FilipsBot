@@ -1,18 +1,20 @@
 require "socket"
 class Bot_core
+
 	attr_reader :server_adress, :port, :nick ,:channel, :server
 
   def initialize(params = {
   		:server_adress => "chat.freenode.net",
   		:channel => "#bitmaker",
   		:port => 6667,
-  		:nick => "Filip"
+  		:nick => "Filip-Bot"
   	})
 	  @server_adress = params[:server_adress]
 	  @port =  params[:port]
-      @channel = params[:channel]
-      @nick = params[:nick]
-      @server = TCPSocket.open(server_adress,port)
+    @channel = params[:channel]
+    @nick = params[:nick]
+    @server = TCPSocket.open(server_adress,port)
+    puts "Initialized bot to #{server_adress}:#{port} server."
   end
 
   def connect
@@ -33,9 +35,6 @@ class Bot_core
   def send_message(msg) 
     @server.puts "PRIVMSG #{@channel} :#{msg}"
   end
-
-  private
-
 
 end
 

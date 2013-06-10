@@ -41,7 +41,6 @@ class Weather_Scrapper
 
 	def update_city(city)
 		@city=city
-		pedalbot=fag
 	end
 
 	def future_weather_arrays
